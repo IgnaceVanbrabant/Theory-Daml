@@ -5,21 +5,20 @@ Topic: Data visualization, spread, correlation, and data cleaning
 
 ## Main idea
 
-Week 2 continues Exploratory Data Analysis (EDA). The goal is to understand data more deeply so we can describe it correctly, compare groups, find relationships, clean problems, and make better decisions.
+Week 2 continues Exploratory Data Analysis (EDA). The goal is to understand data well enough to describe it, compare it, find patterns, clean problems, and make better decisions.
 
-This week focuses on:
+The useful topics are:
 
 - population vs sample,
 - representativeness and sampling bias,
-- measures of spread,
+- spread and variability,
+- MAD, variance, and standard deviation,
 - skewness and kurtosis,
 - correlation,
 - correlation vs causation,
+- spurious correlations,
 - one-hot encoding,
-- missing values,
-- handling missing data.
-
-The important idea is that data analysis is not only about calculating numbers. It is about knowing what those numbers mean and whether they support a reliable conclusion.
+- missing values and how to handle them.
 
 ---
 
@@ -29,230 +28,170 @@ A **population** is the full group you care about.
 
 Examples:
 
-- all people in Belgium,
+- all Belgian people,
 - all EU citizens,
 - all students in Belgium,
-- all computer science students,
 - all customers of a company.
 
 A **sample** is a smaller part of that population.
 
-We use samples because measuring the whole population is often impossible or too expensive. There can be limits in:
+We usually use samples because studying the full population takes too much time, money, or access.
 
-- time,
-- money,
-- access,
-- privacy,
-- available data.
-
-### Why this matters
-
-Most data analysis uses samples, but we usually want to say something about the bigger population. That only works if the sample is good enough.
-
-For example, if you want to know how much young people like coding, asking only computer science students will probably give a biased answer. They are more likely to like computers than the average young person.
+Important: conclusions from a sample are only useful if the sample reasonably represents the population.
 
 ---
 
 ## Representativeness and sampling bias
 
-A sample is **representative** when it reasonably reflects the population you want to study.
+A sample is **representative** when it looks enough like the population you want to study.
 
-A sample is **biased** when some groups are overrepresented or underrepresented.
+A sample is **biased** when some groups are included too much or too little.
 
-Example question:
+Example:
 
-> How much do young people like coding and working with computers?
+If you want to know how much young people like coding, asking only computer science students is biased because they are already more interested in computers.
 
-Possible samples:
+Better sampling means including different groups from the population.
 
-- people present in a computer science lecture,
-- the first 200 young people found in one shopping street,
-- students from different high schools, with a few people asked at each school.
+When checking a sample, ask:
 
-The third option is probably better because it includes more different groups. The first option is likely biased because computer science students already have an interest in computers.
-
-### Why this matters
-
-If the sample is biased, the conclusion can be wrong even if the calculations are correct.
-
-Good data analysis asks:
-
-- Who is included in the sample?
+- Who is included?
 - Who is missing?
-- Does the sample match the population?
-- Could the way we collected data influence the result?
+- Was the data collected in a fair way?
+- Could the sample change the conclusion?
 
 ---
 
 ## Measures of spread
 
-Spread, also called **variability**, describes how far apart the values in a dataset are.
+**Spread** means how far apart the values in a dataset are.
 
-Two datasets can have the same average but very different spread.
-
-Example:
+Two datasets can have the same average but different spread:
 
 ```text
 Dataset A: 48, 49, 50, 51, 52
 Dataset B: 10, 30, 50, 70, 90
 ```
 
-Both can have the same center, but Dataset B is much more spread out.
+Both are centered around 50, but Dataset B is much more spread out.
 
-### Why spread matters
-
-Spread helps understand:
+Spread is useful because it shows:
 
 - consistency,
 - risk,
 - reliability,
 - volatility,
-- uncertainty,
-- how much values differ from the typical value.
+- how different values are from the typical value.
 
 Examples:
 
-- In finance, high spread can mean high risk.
-- In manufacturing, high spread can mean inconsistent quality.
-- In customer ratings, high spread can mean mixed opinions.
-- In travel costs, high spread can mean packages vary strongly in price.
+- High spread in prices means prices vary a lot.
+- High spread in ratings means customers disagree.
+- High spread in production quality means the process is unreliable.
 
 ---
 
-## Mean Absolute Deviation, variance, and standard deviation
+## MAD, variance, and standard deviation
 
-These are common ways to measure spread.
+These three statistics measure spread.
 
 ### Mean Absolute Deviation (MAD)
 
-MAD is the average absolute distance between each value and the mean.
-
-Formula idea:
+MAD is the average absolute distance from the mean.
 
 ```text
 MAD = average of |value - mean|
 ```
 
-MAD is easy to understand because it tells you the average distance from the mean.
+It is easy to understand because it tells you the average distance from the mean.
 
 ### Variance
 
 Variance is the average squared distance from the mean.
 
-Formula idea:
-
 ```text
 variance = average of (value - mean)^2
 ```
 
-Variance gives more weight to large differences because the differences are squared.
+It gives more weight to large differences because the distances are squared.
 
 ### Standard deviation
 
-Standard deviation is the square root of the variance.
-
-Formula idea:
+Standard deviation is the square root of variance.
 
 ```text
 standard deviation = square root of variance
 ```
 
-Standard deviation is commonly used because it is in the original units of the data.
-
-For example:
-
-- if cost is measured in euros, standard deviation is also in euros,
-- if stay length is measured in days, standard deviation is also in days.
-
----
-
-## Why absolute values and squares are used
-
-If we simply add the differences from the mean, positive and negative differences cancel out.
+It is commonly used because it is in the original units of the data.
 
 Example:
+
+- if cost is in euros, standard deviation is also in euros,
+- if stay length is in days, standard deviation is also in days.
+
+### Why not use normal differences?
+
+If we add normal differences from the mean, positive and negative values cancel out.
 
 ```text
 -5 + 5 = 0
 ```
 
-That would make the spread look smaller than it really is.
-
-To avoid this:
-
-- MAD uses absolute values,
-- variance uses squared values.
-
-### Difference between MAD and variance
-
-MAD treats distances more directly.
-
-Variance punishes large deviations more strongly because it squares the distance. This makes variance and standard deviation more sensitive to outliers.
+That would hide the real spread. Absolute values and squares prevent this.
 
 ---
 
 ## Comparing spread measures
 
-| Measure | What it does | Strength | Weakness |
-| --- | --- | --- | --- |
-| MAD | Average absolute distance from mean | Easy to understand | Less common in practice |
-| Variance | Average squared distance from mean | Strongly shows large deviations | Units are squared, so harder to interpret |
-| Standard deviation | Square root of variance | Common and uses original units | Sensitive to outliers |
+| Measure | Meaning | Main point |
+| --- | --- | --- |
+| MAD | Average absolute distance from mean | Easy to interpret |
+| Variance | Average squared distance from mean | Strongly affected by large deviations |
+| Standard deviation | Square root of variance | Common and uses original units |
 
-Use spread together with the mean or median. A center value alone does not show how consistent the data is.
+Standard deviation is very useful, but it is sensitive to outliers.
 
 ---
 
 ## Skewness
 
-**Skewness** describes whether a distribution is symmetrical or has a longer tail on one side.
+**Skewness** describes whether data is symmetrical or has a longer tail on one side.
 
 ### Positive skew
 
-Positive skew is also called right skew.
-
-Most values are lower, but a few high values stretch the right side.
+Positive skew, or right skew, means most values are lower, but a few high values stretch the right side.
 
 Example:
 
 - most trips are cheap,
 - a few luxury trips are very expensive.
 
-In positive skew, the mean is often higher than the median because the high values pull the mean upward.
+The mean is often higher than the median because high values pull it upward.
 
 ### Negative skew
 
-Negative skew is also called left skew.
-
-Most values are higher, but a few low values stretch the left side.
+Negative skew, or left skew, means most values are higher, but a few low values stretch the left side.
 
 Example:
 
 - most ratings are high,
 - a few very low ratings pull the distribution left.
 
-### Why skewness matters
-
-Skewness tells you whether the mean is a good summary. If data is strongly skewed, the median may better describe the typical value.
+Skewness matters because strongly skewed data may be better summarized with the median than the mean.
 
 ---
 
 ## Kurtosis
 
-**Kurtosis** describes the tail behavior and peak shape of a distribution. It focuses on how likely extreme values are.
-
-### High kurtosis
+**Kurtosis** describes how extreme the tails of a distribution are.
 
 High kurtosis means:
 
 - sharper peak,
 - heavier tails,
 - more extreme values,
-- more influence from outliers.
-
-This is also called **leptokurtic**.
-
-### Low kurtosis
+- more outlier influence.
 
 Low kurtosis means:
 
@@ -260,11 +199,7 @@ Low kurtosis means:
 - thinner tails,
 - fewer extreme values.
 
-This is also called **platykurtic**.
-
-### Why kurtosis matters
-
-Kurtosis helps show whether extreme values are common enough to worry about. This matters for risk, outlier detection, and understanding how stable the data is.
+Kurtosis is useful when you care about risk and extreme cases.
 
 ---
 
@@ -274,9 +209,9 @@ Kurtosis helps show whether extreme values are common enough to worry about. Thi
 
 It asks:
 
-> When one variable changes, what tends to happen to the other variable?
+> When one variable increases, what happens to the other variable?
 
-The correlation coefficient is usually written as **r**.
+The correlation coefficient is written as **r**.
 
 | r value | Meaning |
 | --- | --- |
@@ -284,27 +219,13 @@ The correlation coefficient is usually written as **r**.
 | `r = -1` | Perfect negative linear relationship |
 | `r = 0` | No linear relationship |
 
-### Positive correlation
+Examples:
 
-When one variable increases, the other also tends to increase.
+- Positive correlation: longer trips may cost more.
+- Negative correlation: higher discounts may reduce margin.
+- No correlation: two variables do not move together clearly.
 
-Example:
-
-- longer stay length may be related to higher trip cost.
-
-### Negative correlation
-
-When one variable increases, the other tends to decrease.
-
-Example:
-
-- higher discount may be related to lower margin.
-
-### No correlation
-
-The variables do not move together in a clear linear way.
-
-Important: correlation measures **linear** relationships. If a relationship is curved or more complex, correlation may not show it clearly.
+Important: correlation measures **linear** relationships. A curved relationship may not be captured well.
 
 ---
 
@@ -312,46 +233,32 @@ Important: correlation measures **linear** relationships. If a relationship is c
 
 A **correlation matrix** shows correlations between many numeric variables at once.
 
-It is useful when a dataset has many columns and you want to quickly see which variables move together.
-
-Example uses:
+It helps quickly find possible relationships, such as:
 
 - cost vs margin,
 - stay length vs cost,
 - guests vs cost,
-- rating vs margin,
-- discount vs margin.
+- discount vs margin,
+- rating vs package features.
 
-Correlation matrices can help find patterns, but they should not be treated as proof of cause.
+A correlation matrix is useful for exploration, but it does not prove cause.
 
 ---
 
 ## Correlation is not causation
 
-This is one of the most important ideas in the lecture.
-
-If two variables are correlated, it does not automatically mean that one causes the other.
-
-Example from the PDF:
-
-- ice cream sales and drownings can both increase in summer.
-
-That does not mean ice cream causes drowning. A third factor, hot weather, may influence both.
-
-### Why this matters
-
-Confusing correlation with causation can lead to bad decisions.
+Correlation does not mean one variable causes the other.
 
 Example:
 
-- homes with more books may be correlated with better academic results,
-- but simply mailing books to homes may not fix the real causes,
-- because the real explanation could involve parents, income, education, environment, or other factors.
+Ice cream sales and drownings can both increase in summer. That does not mean ice cream causes drowning. Hot weather is probably influencing both.
 
-Before claiming cause, ask:
+Bad decisions happen when correlation is treated as proof.
 
-- Is there a logical explanation?
-- Could another variable explain both?
+Before claiming causation, ask:
+
+- Is there a logical reason?
+- Could a third variable explain it?
 - Was there an experiment?
 - Is there enough evidence?
 
@@ -361,36 +268,23 @@ Before claiming cause, ask:
 
 A **spurious correlation** is a relationship that appears in the data but is not meaningful.
 
-It can happen by coincidence, especially in large datasets with many variables.
+This happens more often in large datasets because many variables are compared. The more relationships you search for, the more random patterns you may find.
 
-The more variables you compare, the more likely you are to find random patterns.
+To avoid being fooled, ask:
 
-### How to avoid being fooled
-
-Always ask:
-
-- Does this relationship make sense?
+- Does the relationship make sense?
 - Is there domain knowledge supporting it?
 - Could it be coincidence?
-- Could a hidden third variable explain it?
-- Should we test it further?
-
-Correlation is useful for finding possible relationships, but it is not enough by itself.
+- Could another variable explain it?
+- Should it be tested further?
 
 ---
 
 ## One-hot encoding
 
-Many statistics and machine-learning methods need numeric data. But many useful columns are categorical.
+Many calculations and machine-learning models need numeric input. Categorical data often needs to be converted first.
 
-Example categorical values:
-
-- red, green, blue,
-- standard, silver, gold,
-- relaxation, cultural, adventure,
-- Belgium, France, Germany.
-
-**One-hot encoding** converts categories into numeric binary columns.
+**One-hot encoding** turns categories into binary columns.
 
 Example:
 
@@ -410,113 +304,84 @@ After one-hot encoding:
 | 0 | 1 | 0 |
 | 0 | 0 | 1 |
 
-### Why this is useful
-
-After encoding, categorical variables can be used in numeric analysis and machine-learning models.
-
-For example, we could analyze how destination or package type relates to cost or margin.
+This makes it possible to use categories like package type, destination, or membership level in numeric analysis.
 
 ---
 
 ## Missing values
 
-Missing values are values that should be in the dataset but are absent.
+Missing values are values that are absent from the dataset.
 
 Examples:
 
-- a customer has no age listed,
-- a trip has no cost listed,
-- a customer has no country listed,
-- a student has no SAT score listed.
+- missing customer age,
+- missing trip cost,
+- missing country,
+- missing test score.
 
-Missing values matter because they can bias results or reduce the amount of usable data.
+Missing values matter because they can bias results or reduce usable data.
 
 ---
 
 ## Types of missingness
 
-### Missing Completely at Random (MCAR)
+### MCAR: Missing Completely at Random
 
-The missing value is unrelated to anything in the data.
+The missingness is unrelated to the data.
 
 Example:
 
-- a participant accidentally skips a survey question,
-- a random technical issue causes some transactions to be lost.
+- a random technical problem loses some transactions.
 
-MCAR is usually the least dangerous type because the missingness is random.
-
-### Missing at Random (MAR)
+### MAR: Missing at Random
 
 The missingness is related to another observed variable, but not directly to the missing value itself.
 
 Example:
 
-- younger people are less likely to answer a certain survey question.
+- younger people are less likely to answer a certain question.
 
-The missingness depends on age, which is observed.
-
-### Missing Not at Random (MNAR)
+### MNAR: Missing Not at Random
 
 The missingness is related to the missing value itself.
 
-Example:
+Examples:
 
-- people with high income do not want to report their income,
-- firms in financial trouble do not want to disclose earnings.
+- people with high income do not report income,
+- companies in financial trouble do not report earnings.
 
-MNAR is dangerous because the missing data is connected to the thing you are trying to measure.
+MNAR is the most dangerous because the missing data is connected to the thing you want to measure.
 
 ---
 
 ## Handling missing values
 
-There is no single best method. The right choice depends on why the values are missing and what analysis you want to do.
+There is no single best solution. First understand why the data is missing.
 
-### 1. Remove missing data
+Possible methods:
 
-You can delete rows with missing values.
+### Remove rows
 
-Advantage:
+Simple, but you may lose important data or create bias.
 
-- simple.
+### Use available data only
 
-Disadvantage:
+Keeps more rows, but different analyses may use different subsets.
 
-- you may lose important data,
-- the remaining data may become biased.
+### Impute values
 
-### 2. Use available data only
+Fill in missing values with something like:
 
-You can skip missing values only when that variable is needed.
-
-Advantage:
-
-- keeps more rows.
-
-Disadvantage:
-
-- different analyses may use different subsets of data, which can make results inconsistent.
-
-### 3. Impute missing values
-
-Imputation means filling in missing values.
-
-Possible replacements:
-
-- 0,
 - mean,
 - median,
 - mode,
 - predicted value.
 
-Be careful: replacing missing values can introduce bias. Replacing with 0 is often a bad idea unless 0 has a real meaning.
+Be careful: imputation can introduce bias. Replacing with 0 is often bad unless 0 has a real meaning.
 
-### 4. Mark missing values
+### Mark missingness
 
-Sometimes missingness itself is useful information.
-
-You can add a column showing whether a value was missing.
+Add a column showing whether a value was missing.
 
 Example:
 
@@ -524,71 +389,53 @@ Example:
 Income_missing = 1
 ```
 
-This can help detect patterns in missingness.
-
----
-
-## Good missing-value practice
-
-Before handling missing values:
-
-1. Check how many values are missing.
-2. Check which columns have missing values.
-3. Think about why the values are missing.
-4. Decide whether the missingness is MCAR, MAR, or MNAR.
-5. Choose a method that fits the analysis.
-6. Document what you did.
-
-Documenting matters because missing-value handling changes the dataset and affects interpretation.
+This is useful when missingness itself contains information.
 
 ---
 
 ## Simple Week 2 workflow
 
-A good workflow for this lecture is:
+1. **Define the population**  
+   Know who or what you want to study.
 
-1. **Define the population and sample**  
-   Know who or what you want to study and what data you actually have.
+2. **Check the sample**  
+   Ask whether it represents the population.
 
-2. **Check representativeness**  
-   Ask whether the sample could be biased.
-
-3. **Summarize the center and spread**  
-   Use mean, median, MAD, variance, and standard deviation where useful.
+3. **Measure center and spread**  
+   Use mean, median, MAD, variance, and standard deviation.
 
 4. **Check shape**  
-   Look for skewness, heavy tails, and extreme values.
+   Look for skewness, kurtosis, and outliers.
 
 5. **Look for relationships**  
-   Use correlation for numeric variables.
+   Use correlation and correlation matrices.
 
 6. **Avoid false conclusions**  
    Remember that correlation is not causation.
 
-7. **Prepare categorical data**  
-   Use one-hot encoding when categorical values need to become numeric.
+7. **Convert categories if needed**  
+   Use one-hot encoding for categorical variables.
 
 8. **Handle missing values carefully**  
-   Understand why values are missing before removing or imputing them.
+   Decide whether values are MCAR, MAR, or MNAR.
 
-9. **Document decisions**  
-   Write down cleaning choices so the analysis is reproducible.
+9. **Document your choices**  
+   Cleaning decisions affect the final interpretation.
 
 ---
 
 ## Key takeaways
 
-- A population is the full group of interest; a sample is the part you actually observe.
-- A biased sample can produce wrong conclusions even with correct calculations.
-- Spread shows how consistent or variable the data is.
-- MAD, variance, and standard deviation all measure spread in different ways.
-- Standard deviation is common because it uses the original data units.
-- Skewness shows whether a distribution has a longer tail on one side.
+- A population is the full group; a sample is the part you observe.
+- Samples must be representative to support good conclusions.
+- Spread shows how variable or consistent data is.
+- MAD, variance, and standard deviation measure spread differently.
+- Standard deviation is common because it uses the original units.
+- Skewness shows whether data has a long tail on one side.
 - Kurtosis shows how much extreme values matter.
-- Correlation measures linear relationships between variables.
+- Correlation measures linear relationships.
 - Correlation does not prove causation.
-- Spurious correlations can appear by chance, especially in large datasets.
-- One-hot encoding turns categorical data into numeric binary columns.
+- Spurious correlations can happen by chance.
+- One-hot encoding turns categories into numeric columns.
 - Missing values can be MCAR, MAR, or MNAR.
-- Missing data should be handled based on why it is missing.
-- Always document how data was cleaned.
+- Missing data should be handled carefully and documented.
