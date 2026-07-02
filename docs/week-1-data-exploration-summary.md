@@ -1,759 +1,450 @@
-# Week 1 - Data Exploration: Deep Summary
+# Week 1 - Data Exploration: Meaningful Summary
 
 Source: `Week_1_-_Data_Exploration_ce24.pdf`  
 Course: Data Analytics & Machine Learning  
-Main topic: Exploratory Data Analysis (EDA)
+Topic: Exploratory Data Analysis (EDA)
 
-This summary explains the Week 1 lecture in depth. The slide pictures are used as visual anchors: each important visual is followed by what it shows, what the parts do, and why that idea is needed in data analysis.
-
----
-
-## 1. What this week is about
-
-![Slide 2 - This week](assets/week-1-data-exploration/slide-02.jpg)
-
-The lecture has four main goals:
-
-1. Introduce the case study used during the semester.
-2. Learn the different data types used in AI and analytics.
-3. Understand why "the average person has less than 2 legs."
-4. Learn how statistics can be used honestly or misleadingly.
-
-### What each part does
-
-- **The case study** gives the course a realistic business problem. Instead of learning formulas in isolation, the course connects data concepts to decisions a company might actually make.
-- **Data types** tell us what kind of information each column contains. This matters because different data types need different calculations, charts, and machine-learning treatment.
-- **The average legs example** shows that a mathematically correct statistic can still be easy to misunderstand.
-- **"Lie with statistics"** introduces the idea that statistics are tools. A tool can clarify reality, but it can also hide important context if it is chosen or presented badly.
-
-### Why this is needed
-
-EDA is the step where we learn what the data means before trying to model it. If we skip this, we can build models that are technically correct but based on wrong assumptions.
+This is not a slide-by-slide explanation. It is a meaningful study summary of the important ideas from the PDF, with selected pictures from the lecture where they help explain the concept.
 
 ---
 
-## 2. Where this fits in the course
+## 1. The big idea of this lesson
 
-![Slide 3 - Course schedule](assets/week-1-data-exploration/slide-03.jpg)
+![Overview of the week](assets/week-1-data-exploration/slide-02.jpg)
 
-The schedule starts with equipment, variable types, summary statistics, visualization, and probability. Only after that does it move into supervised learning, model evaluation, ensembles, neural networks, unsupervised learning, and reinforcement learning.
+The first week is about learning how to understand data before trying to use it for AI or machine learning. This step is called **Exploratory Data Analysis**, or **EDA**.
 
-### What this does
+EDA is important because data is not automatically useful. A dataset can contain many columns, different data types, mistakes, extreme values, and patterns that are not obvious at first. Before building models or making decisions, we need to know what the data represents and how reliable it is.
 
-This ordering matters because machine learning depends on data understanding:
+The lecture focuses on four main ideas:
 
-- **Variable types** tell the model how data should be represented.
-- **Summary statistics** describe the center, spread, and unusual values.
-- **Visualization** helps reveal patterns that numbers alone may hide.
-- **Probability and statistics** provide the language for uncertainty.
+1. **Understand the business case.**  
+   Data should be connected to a real problem or decision.
 
-### Why it needs to happen before modeling
+2. **Recognize data types.**  
+   Different kinds of data need different statistics, charts, and model treatment.
 
-A model does not know whether a number is a price, a rating, an ID, or a category encoded as a number. Humans must define those meanings first. EDA is the process of turning raw columns into understood information.
+3. **Use summary statistics carefully.**  
+   Numbers like the mean, median, and mode summarize data, but each one answers a different question.
 
----
-
-## 3. The case study: Ada Lovelace's travel agency
-
-![Slide 5 - Ada Lovelace travel agency](assets/week-1-data-exploration/slide-05.jpg)
-
-The course uses a fictional travel agency. This gives us a concrete setting for data questions about sales, customers, packages, costs, margins, and ratings.
-
-### Why use a business case?
-
-A business case makes the data meaningful. For example, "cost" is not just a number. It affects profit. "membership" is not just text. It may describe customer loyalty. "rating" is not just a score. It can represent customer satisfaction.
+4. **Do not trust statistics without context.**  
+   A statistic can be correct mathematically but still give a misleading impression.
 
 ---
 
-## 4. The data columns and what they represent
+## 2. The case study: Ada Lovelace's travel agency
 
-![Slide 7 - Our data](assets/week-1-data-exploration/slide-07.jpg)
+The lecture uses a fictional travel agency as the running example. This makes the theory easier to understand because every data column can be connected to a business meaning.
 
-The dataset contains columns such as:
+![Travel agency dataset columns](assets/week-1-data-exploration/slide-07.jpg)
 
-- `SalesID`
-- `Age`
-- `Country`
-- `Membership`
-- `Previous_Purchases`
-- `Package type`
-- `Destination`
-- `Cost`
-- `Margin`
-- `Guests`
-- `Stay_length`
-- `Travel_month`
-- `Earlybird discount`
-- `Rating`
+The dataset contains information such as:
 
-### What these columns do
+| Column | Meaning | Why it matters |
+| --- | --- | --- |
+| `SalesID` | Unique sale identifier | Helps track individual transactions. |
+| `Age` | Customer age | Can reveal customer groups or market segments. |
+| `Country` | Customer country | Useful for regional demand analysis. |
+| `Membership` | Standard, silver, or gold membership | May show loyalty or customer value. |
+| `Previous_Purchases` | Past purchases | Helps measure returning-customer behavior. |
+| `Package type` | Relaxation, cultural, or adventure | Shows what type of product was sold. |
+| `Destination` | Travel destination | Helps identify popular locations. |
+| `Cost` | Price or cost-related value | Important for revenue and pricing decisions. |
+| `Margin` | Profit margin | Shows how profitable a sale or package is. |
+| `Guests` | Number of travelers | Affects package size and total value. |
+| `Stay_length` | Length of the trip | Can influence cost, margin, and customer satisfaction. |
+| `Travel_month` | Month of travel | Useful for seasonality and demand patterns. |
+| `Earlybird discount` | Whether a discount was used | Helps evaluate promotions. |
+| `Rating` | Customer rating | Measures satisfaction. |
 
-Each column describes one aspect of a sale or customer:
-
-- **Identifiers** such as `SalesID` distinguish one record from another.
-- **Customer attributes** such as `Age`, `Country`, and `Membership` describe who bought the package.
-- **Behavior attributes** such as `Previous_Purchases` show past customer activity.
-- **Product attributes** such as `Package type` and `Destination` describe what was sold.
-- **Financial attributes** such as `Cost` and `Margin` connect the sale to business performance.
-- **Trip attributes** such as `Guests`, `Stay_length`, and `Travel_month` describe the travel plan.
-- **Promotion attributes** such as `Earlybird discount` explain pricing conditions.
-- **Feedback attributes** such as `Rating` describe customer satisfaction.
-
-### Why grouping columns matters
-
-Grouping columns logically helps us ask better questions. For example:
-
-- To study profitability, focus on `Cost`, `Margin`, `Package type`, and `Destination`.
-- To study customer loyalty, focus on `Membership`, `Previous_Purchases`, and `Rating`.
-- To study seasonality, focus on `Travel_month`, `Destination`, and `Package type`.
-
-Without grouping, the dataset looks like "a lot of columns." With grouping, it becomes a collection of business concepts.
+The important point is that these columns are not just random data. They describe customers, products, money, travel behavior, discounts, and satisfaction. EDA helps turn these raw columns into useful knowledge.
 
 ---
 
-## 5. Turning data into questions
+## 3. Good analysis starts with questions
 
-![Slide 8 - Questions using data](assets/week-1-data-exploration/slide-08.jpg)
+![Example business questions](assets/week-1-data-exploration/slide-08.jpg)
 
-The lecture asks:
+The lecture gives examples of questions we can ask with the travel-agency data:
 
 - What package type are we selling the most?
 - Which package type has the highest cost?
 - Which package type has the highest margin?
-- Can historical data help us pick prices instead of doing it manually?
+- Can historical data help us choose prices instead of doing it manually?
 
-### What each question does
+These questions are important because they decide what kind of analysis is needed.
 
-- **"Selling the most"** counts frequency. It tells us demand.
-- **"Highest cost"** compares expenses. It tells us where money is spent.
-- **"Highest margin"** compares profit potential. It tells us which products may be financially strongest.
-- **"Use historical data to pick price"** moves from description toward prediction or optimization.
+For example:
 
-### Why questions come before calculations
+- **Selling the most** means we need counts or frequencies.
+- **Highest cost** means we need numeric comparison.
+- **Highest margin** means we need profitability analysis.
+- **Choosing prices using historical data** moves toward prediction and decision-making.
 
-EDA should not start by calculating random statistics. It should start with a question. The question decides:
-
-- which columns matter,
-- which data type each column has,
-- which statistic is useful,
-- which visualization makes sense,
-- and what decision the analysis should support.
+A common mistake is to calculate statistics without first knowing the question. EDA should start with purpose: what do we want to learn, and what decision could this support?
 
 ---
 
-## 6. Data types
+## 4. Data types: why they matter so much
 
-Data type is one of the most important ideas in the lecture. It tells us what operations are meaningful.
+A central part of the lecture is learning data types. This matters because the data type determines what operations make sense.
 
----
+You cannot analyze every column in the same way. A country, a rating, a cost, and a membership level all behave differently.
 
-### 6.1 Continuous numeric data
+### 4.1 Continuous numeric data
 
-![Slide 9 - Continuous numeric data](assets/week-1-data-exploration/slide-09.jpg)
+![Continuous numeric data](assets/week-1-data-exploration/slide-09.jpg)
 
-Continuous numeric data can take many possible values, including decimals and theoretically any value inside a valid range. The slide uses **cost** as the example.
+**Continuous numeric data** can take many possible values, including decimal values. In the PDF, `Cost` is used as an example.
 
-### What it does
-
-Continuous data represents measurements:
+Examples:
 
 - cost,
-- price,
 - margin,
-- height,
+- price,
 - distance,
-- time,
-- temperature.
+- temperature,
+- time.
 
-Because these values are numeric measurements, we can usually calculate:
+For this kind of data, calculations like mean, median, minimum, maximum, range, and standard deviation can make sense.
 
-- mean,
-- median,
-- minimum and maximum,
-- standard deviation,
-- percentiles,
-- differences,
-- ratios.
+However, continuous values still need rules. For example, cost should normally be positive. If a travel package has a negative cost, the number might be an error or it might need special explanation.
 
-### Why constraints matter
+### 4.2 Discrete numeric data
 
-The slide notes that cost must be positive. This is a domain rule. A model or analysis may accept a negative cost mathematically, but the business meaning would be wrong.
+**Discrete numeric data** is numeric, but it can only take specific values. A rating from 1 to 5 is a good example.
 
-So continuous variables need two kinds of understanding:
+Examples:
 
-1. **Mathematical understanding:** it is a number that can be measured.
-2. **Domain understanding:** only certain values make sense.
-
----
-
-### 6.2 Discrete numeric data
-
-![Slide 10 - Discrete numeric data](assets/week-1-data-exploration/slide-10.jpg)
-
-Discrete numeric data can only take a limited set of values. The slide uses **rating** with possible values 1, 2, 3, 4, and 5.
-
-### What it does
-
-Discrete numeric data often represents counts or fixed scores:
-
+- customer rating: 1, 2, 3, 4, or 5,
 - number of guests,
-- previous purchases,
-- rating from 1 to 5,
-- number of nights,
-- number of tickets.
+- number of previous purchases,
+- stay length measured in whole days.
 
-### Why it is different from continuous data
+Discrete data can be counted. Sometimes averages are useful, but we must remember that the average may create a value that does not exist. For example, an average rating of 4.3 summarizes the group, but no individual customer may have given exactly 4.3.
 
-A rating of 4.5 may not exist if the system only allows whole numbers. A guest count of 2.7 is impossible. Because of this, we must avoid treating all numeric-looking columns as fully continuous measurements.
+### 4.3 Nominal categorical data
 
-### Why this matters for analysis
+**Nominal categorical data** contains categories with no natural order.
 
-Discrete variables can often be summarized by frequencies:
+Examples:
 
-- How many customers gave rating 5?
-- How many trips had 2 guests?
-- How many customers made 0 previous purchases?
-
-The mean can still be useful sometimes, but it may create values that do not actually exist in the dataset.
-
----
-
-### 6.3 Nominal categorical data
-
-![Slide 11 - Nominal categorical data](assets/week-1-data-exploration/slide-11.jpg)
-
-Nominal categorical data contains labels with no natural order. The slide uses **country** as the example.
-
-### What it does
-
-Nominal categories name groups:
-
-- Belgium,
-- France,
-- Germany,
+- country,
 - destination,
 - package type,
 - payment method.
 
-### What the labels do not do
+A nominal category can be encoded as a number, but the number is only a label. If Belgium = 1, France = 2, and Germany = 3, that does not mean Germany is greater than France in a mathematical way. This is especially important in machine learning, where a bad encoding can make a model learn fake relationships.
 
-They do not rank the values. Belgium is not "less than" France. France is not "greater than" Germany. The categories are different, but not ordered.
+### 4.4 Binary data
 
-### Why encoding must be handled carefully
+![Binary data](assets/week-1-data-exploration/slide-12.jpg)
 
-The slide says nominal categories can be converted to numeric values like an enum. That means we might store:
+**Binary data** has only two possible values.
 
-- Belgium = 1,
-- France = 2,
-- Germany = 3.
-
-But those numbers are only codes. They do not mean Germany is three times Belgium or that France is the average of Belgium and Germany. This matters a lot in machine learning, because some models may incorrectly interpret numeric codes as ordered values.
-
----
-
-### 6.4 Binary data
-
-![Slide 12 - Binary data](assets/week-1-data-exploration/slide-12.jpg)
-
-Binary data has only two possible values. The slide uses **paid/unpaid** as the example.
-
-### What it does
-
-Binary data represents yes/no states:
+Examples:
 
 - paid or unpaid,
-- earlybird discount or no discount,
-- customer is a member or not,
-- trip is domestic or international,
-- booking was cancelled or not cancelled.
+- discount or no discount,
+- member or non-member,
+- cancelled or not cancelled.
 
-### Why binary data is useful
+Binary data is often stored as true/false or 1/0. This is useful because it is easy to count and filter. But the meaning of the 1 and 0 must always be clear.
 
-Binary variables are simple and powerful. They can be represented as:
+### 4.5 Ordinal categorical data
 
-- true/false,
-- yes/no,
-- 1/0.
+![Ordinal categorical data](assets/week-1-data-exploration/slide-13.jpg)
 
-This makes them easy to count, filter, and use in models.
+**Ordinal categorical data** has categories with a meaningful order.
 
-### Why the meaning still matters
+Example from the PDF:
 
-Even if binary data is stored as 1 and 0, the meaning must be clear. A 1 could mean paid, cancelled, member, or discount used. The number only becomes useful when the analyst knows what the flag represents.
+```text
+Standard < Silver < Gold
+```
 
----
+This order matters: gold is higher than silver, and silver is higher than standard. But the distance between categories may not be equal. The step from standard to silver might not represent the same business value as the step from silver to gold.
 
-### 6.5 Ordinal categorical data
-
-![Slide 13 - Ordinal categorical data](assets/week-1-data-exploration/slide-13.jpg)
-
-Ordinal categorical data has categories with a natural order. The slide uses **membership**:
-
-`Standard < Silver < Gold`
-
-### What it does
-
-Ordinal data ranks categories:
-
-- standard, silver, gold,
-- low, medium, high,
-- beginner, intermediate, advanced,
-- poor, fair, good, excellent.
-
-### Why ordinal data is not the same as continuous data
-
-The order is meaningful, but the distance between categories may not be equal. The difference between standard and silver may not be the same as the difference between silver and gold.
-
-### Why this matters
-
-Ordinal data often needs special handling:
-
-- It can be sorted.
-- It can be compared by rank.
-- It can sometimes be encoded as numbers.
-- But the numeric encoding should not automatically be treated as a precise measurement.
+That is why ordinal data must be handled carefully. It has order, but it is not always a true measurement scale.
 
 ---
 
-## 7. Core summary statistics
+## 5. Summary statistics: reducing a lot of data into useful information
 
-![Slide 16 - Important metrics](assets/week-1-data-exploration/slide-16.jpg)
+A dataset can contain too many rows to inspect manually. Summary statistics help capture important parts of the data in a few numbers.
 
-The lecture highlights four important ideas:
+The lecture focuses on:
 
-- average,
+- mean,
 - median,
+- mode,
 - outliers,
-- mode.
+- Q1 and Q3,
+- box plots.
 
-These are summary tools. They reduce many data points into a smaller description.
-
-### Why summary statistics are needed
-
-Datasets can be too large to inspect row by row. Summary statistics help answer:
-
-- Where is the center?
-- What is typical?
-- Are there strange values?
-- Which value appears most often?
-- Is the data balanced or skewed?
-
-Each statistic does a different job, so choosing the right one matters.
+Each one answers a different question.
 
 ---
 
-## 8. The average and the "less than 2 legs" example
+## 6. Mean: useful, but easy to misunderstand
 
-![Slide 17 - Average human has less than 2 legs](assets/week-1-data-exploration/slide-17.jpg)
+![Average legs example](assets/week-1-data-exploration/slide-18.jpg)
 
-The statement "the average human has less than 2 legs" sounds absurd at first. Most people have 2 legs. But average does not mean "most common."
+The lecture uses the statement:
 
-![Slide 18 - Legs per person average](assets/week-1-data-exploration/slide-18.jpg)
+> The average human has less than 2 legs.
 
-The visual shows many values of `2` and at least one value lower than `2`. When all values are added and divided by the number of people, the result becomes slightly less than 2.
+This sounds strange because most humans have 2 legs. But it is mathematically possible because some people have fewer than 2 legs. When all values are added together and divided by the number of people, the result becomes slightly less than 2.
 
-### What the average does
-
-The average, also called the mean, adds all values and divides by the number of values:
+The mean is calculated as:
 
 ```text
 mean = sum of all values / number of values
 ```
 
-### Why the average can be useful
+### What the mean does well
 
-The mean is useful because it gives one number that represents the balance point of the data. In business, we might calculate:
+The mean gives a quick central value for numeric data. It is useful for questions like:
 
-- average cost,
-- average margin,
-- average stay length,
-- average rating,
-- average number of guests.
+- What is the average cost of a package?
+- What is the average margin?
+- What is the average rating?
+- What is the average stay length?
 
-This helps compare groups quickly.
+### What the mean does badly
 
-### Why the average can mislead
+The mean is sensitive to extreme values. One very high value or very low value can pull the average away from what is typical.
 
-The mean is sensitive to unusual values. In the legs example, a small number of people with fewer than 2 legs makes the average less than 2. That result is mathematically correct, but it does not describe what is most common.
+So the mean answers:
 
-### What this teaches
+> What is the arithmetic balance point?
 
-The average answers: **What is the arithmetic balance point?**  
-It does not necessarily answer: **What value should I expect to see most often?**
+It does **not** always answer:
 
----
+> What is most common or typical?
 
-## 9. The mean as a formal metric
-
-![Slide 19 - The average](assets/week-1-data-exploration/slide-19.jpg)
-
-The slide defines the average as:
-
-- simple,
-- the sum of all elements divided by the amount of elements,
-- a value that can be absent from the dataset,
-- also known as the mean.
-
-### What each point means
-
-- **Simple:** The calculation is easy and widely understood.
-- **Sum divided by count:** Every value contributes to the result.
-- **Can be a value not in the dataset:** The mean of ratings 1 and 2 is 1.5, even if no one gave rating 1.5.
-- **Also known as mean:** "Average" in this lecture refers to the arithmetic mean.
-
-### Why this matters
-
-Because every value contributes, the mean is powerful when data is balanced, but fragile when data contains extreme values.
+That distinction is one of the most important lessons in the PDF.
 
 ---
 
-## 10. The median
+## 7. Median: better for skewed data and outliers
 
-![Slide 21 - The median](assets/week-1-data-exploration/slide-21.jpg)
+![Why use the median](assets/week-1-data-exploration/slide-24.jpg)
 
-The median is the middle value after the data is sorted.
+The **median** is the middle value after sorting the data.
 
-### What it does
+If the data is skewed or has outliers, the median can describe the typical case better than the mean.
 
-The median splits the dataset into two halves:
-
-- 50% of values are below or equal to it.
-- 50% of values are above or equal to it.
-
-### Why it is useful
-
-The median is less sensitive to extreme values. If one trip costs far more than the others, the average cost can move a lot, but the median cost may stay close to what a typical customer pays.
-
-![Slide 22 - Median legs per person](assets/week-1-data-exploration/slide-22.jpg)
-
-The legs example shows this clearly. Even if one person has fewer than 2 legs, the middle value is still 2 because almost all values are 2.
-
-### Why the median can be better than the mean
-
-![Slide 24 - Why use the median](assets/week-1-data-exploration/slide-24.jpg)
-
-The slide gives an income-like example:
+The PDF gives an example similar to income:
 
 ```text
 [10, 10, 10, 10, 10, 10, 50, 300]
 ```
 
-The value 300 pulls the mean upward. The median stays closer to the typical value.
+Most values are close to 10, but 300 is much larger. The mean will be pulled upward by 300. The median stays closer to the middle of the actual data.
 
-### What this teaches
+### Why this matters
 
-The median answers: **What is the middle observation?**  
-It is especially useful when data is skewed or contains outliers.
+In the travel-agency dataset, the median may be better than the mean for:
 
----
+- package cost,
+- margin,
+- stay length,
+- number of previous purchases,
+- customer spending.
 
-## 11. Outliers
-
-![Slide 26 - What are outliers](assets/week-1-data-exploration/slide-26.jpg)
-
-Outliers are values that differ significantly from the rest of the data.
-
-### What outliers do
-
-Outliers can:
-
-- pull the mean upward or downward,
-- stretch chart axes,
-- make normal patterns harder to see,
-- reveal errors,
-- reveal rare but important events.
-
-### Why outliers happen
-
-The slide lists several causes:
-
-- **Measurement errors:** For example, recording feet instead of centimeters.
-- **Human error:** For example, typing an extra zero.
-- **Uncommon real values:** For example, a genuinely unusual person, customer, or trip.
-
-### Why outliers should not be deleted automatically
-
-An outlier is not always wrong. A very expensive travel package might be a data entry mistake, but it might also be a luxury package that matters a lot for profit. The analyst must investigate.
-
-### What this teaches
-
-Outlier handling is not just technical. It is also a business decision:
-
-- If the value is impossible, fix or remove it.
-- If it is rare but real, keep it and understand its effect.
-- If it changes the conclusion, report the analysis with and without it.
+If a few luxury trips are extremely expensive, the average cost may look high even though most customers buy cheaper trips. The median helps show what a typical customer experiences.
 
 ---
 
-## 12. How statistics can mislead
+## 8. Mode: the most common value
 
-![Slide 28 - Nixon quote](assets/week-1-data-exploration/slide-28.jpg)
+![Mode explanation](assets/week-1-data-exploration/slide-31.jpg)
 
-The quote says there are "lies, damned lies, and statistics." The point is not that statistics are bad. The point is that statistics can be used selectively.
+The **mode** is the value that appears most often.
 
-![Slide 29 - Let's lie with statistics](assets/week-1-data-exploration/slide-29.jpg)
+This is especially useful for categorical data, because mean and median often do not make sense for categories.
 
-### What misleading statistics do
+Examples of mode questions:
 
-Misleading statistics usually do one of these:
+- What is the most common package type?
+- What is the most common destination?
+- Which membership level appears most often?
+- What rating is given most often?
+- Which country has the most customers?
 
-- choose a metric that supports the desired story,
-- hide outliers,
-- ignore sample size,
-- compare groups unfairly,
-- use a chart scale that exaggerates differences,
-- present correlation as causation,
-- report an average when the median would be more honest.
-
-### Why this matters in EDA
-
-EDA is partly about protecting ourselves from bad conclusions. If we only calculate one number, we may tell an incomplete story. A good analysis checks multiple views of the same data.
-
-For example, with travel package cost:
-
-- Mean cost may show total financial weight.
-- Median cost may show typical customer experience.
-- Mode may show the most common price point.
-- Outliers may reveal luxury or data errors.
-- A box plot may show spread and unusual values.
+The mode answers a different question than the mean or median. It tells us what is most frequent, not what is mathematically central.
 
 ---
 
-## 13. Mode
+## 9. Outliers: strange values that need investigation
 
-![Slide 31 - Mode](assets/week-1-data-exploration/slide-31.jpg)
+![Outliers explanation](assets/week-1-data-exploration/slide-26.jpg)
 
-The mode is the most frequent value.
+Outliers are values that differ strongly from the rest of the data.
 
-### What it does
+They can happen because of:
 
-The mode answers: **Which value appears most often?**
+- measurement errors,
+- typing mistakes,
+- unit mistakes,
+- rare but real events,
+- unusual customers or products.
 
-In the legs example, the mode is 2 because 2 is the most common number of legs.
+For example, if a trip cost is recorded as 100000 instead of 1000, it may be a typing error. But a very expensive luxury trip could also be real. That is why outliers should not be deleted automatically.
 
-### Why it is different from mean and median
+### Why outliers matter
 
-- The **mean** is the arithmetic balance point.
-- The **median** is the middle value.
-- The **mode** is the most common value.
+Outliers can strongly affect analysis:
 
-These can be the same, but they do not have to be.
+- They can pull the mean up or down.
+- They can make graphs harder to read.
+- They can hide the normal pattern.
+- They can reveal important rare cases.
+- They can indicate data-quality problems.
 
-![Slide 32 - Advantages of the mode](assets/week-1-data-exploration/slide-32.jpg)
-
-### Why the mode is important for categorical data
-
-For categories, mean often makes no sense. We cannot average `Belgium`, `France`, and `Germany`. But we can count which country appears most often.
-
-The mode works well for:
-
-- most common country,
-- most common destination,
-- most common package type,
-- most common membership level,
-- most common rating.
-
-### Why this is needed
-
-Many business questions are frequency questions. For example:
-
-- Which package type sells most often?
-- Which destination is most popular?
-- Which membership level is most common?
-
-The mode is the summary statistic designed for that kind of question.
+Good EDA investigates outliers instead of ignoring them.
 
 ---
 
-## 14. Q1, Q3, and quartiles
+## 10. How statistics can mislead
 
-![Slide 34 - Q1 and Q3](assets/week-1-data-exploration/slide-34.jpg)
+![Statistics can mislead](assets/week-1-data-exploration/slide-28.jpg)
 
-Q1 and Q3 are quartiles:
+The lecture includes the quote:
+
+> There are 3 kinds of lies: lies, damned lies, and statistics.
+
+The point is not that statistics are useless. The point is that statistics can be used in misleading ways.
+
+A statistic can mislead when someone:
+
+- reports only the mean while hiding outliers,
+- chooses a chart scale that exaggerates differences,
+- ignores sample size,
+- compares groups unfairly,
+- hides missing data,
+- presents correlation as if it proves causation,
+- chooses the statistic that supports the desired story.
+
+For example, saying "the average package cost is high" might be true because of a few luxury packages. But if most customers buy cheaper packages, the median gives a different and important part of the story.
+
+A meaningful analysis should usually compare multiple summaries instead of relying on only one number.
+
+---
+
+## 11. Q1, Q3, IQR, and box plots
+
+![Box plot components](assets/week-1-data-exploration/slide-38.jpg)
+
+The lecture introduces Q1, Q3, and box plots as tools for understanding distribution.
+
+### Q1 and Q3
 
 - **Q1** is the first quartile, around the 25% point.
 - **Q3** is the third quartile, around the 75% point.
 
-### What they do
+Together, they show the middle 50% of the data.
 
-Quartiles divide sorted data into quarters:
+### IQR
 
-- 25% of values are at or below Q1.
-- 50% of values are around the median.
-- 75% of values are at or below Q3.
-
-### Why quartiles are needed
-
-The median gives one center point, but it does not show spread. Q1 and Q3 show the middle range of the data. This is useful because two datasets can have the same median but very different variability.
-
-### Interquartile range
-
-The distance between Q1 and Q3 is called the interquartile range:
+The **interquartile range** is:
 
 ```text
 IQR = Q3 - Q1
 ```
 
-The IQR describes the spread of the middle 50% of the data.
+It measures how spread out the middle half of the data is.
 
----
+### Box plots
 
-## 15. Box plots
+A box plot summarizes a distribution visually:
 
-![Slide 38 - Box plot explanation](assets/week-1-data-exploration/slide-38.jpg)
+- The line inside the box shows the median.
+- The bottom of the box shows Q1.
+- The top of the box shows Q3.
+- The box height shows the IQR.
+- The whiskers show spread outside the box.
+- Points beyond the whiskers can indicate outliers.
 
-A box plot is a compact picture of distribution.
-
-### What each part does
-
-- **Median line:** Shows the middle of the data.
-- **Q1:** Shows the lower edge of the middle 50%.
-- **Q3:** Shows the upper edge of the middle 50%.
-- **Box:** Runs from Q1 to Q3, so it shows the interquartile range.
-- **Whiskers:** Extend from the box toward the lower and upper non-outlier values.
-- **Outlier points, when shown:** Values outside the whisker range.
-
-### Why the whiskers use 1.5 times the IQR
-
-The slide says whiskers stretch to a maximum of 1.5 times the height of the box, meaning 1.5 times the IQR. This rule gives a practical boundary for "normal enough" spread. Values beyond that boundary are candidates for outliers.
+The lecture notes that whiskers can stretch up to 1.5 times the IQR. Values beyond that range are often treated as possible outliers.
 
 ### Why box plots are useful
 
-Box plots show several ideas at once:
+Box plots are useful because they show center, spread, skew, and possible outliers in one compact visual.
 
-- center,
-- spread,
-- skew,
-- unusual values,
-- comparison between groups.
-
-For the travel agency, box plots could compare:
+For the travel-agency data, box plots could compare:
 
 - cost by package type,
-- margin by destination,
+- margin by package type,
 - rating by membership level,
-- stay length by travel month.
+- stay length by destination,
+- cost by travel month.
 
-### Why this matters
-
-A table of averages may hide variability. A box plot can show whether one package type has stable margins while another has very inconsistent margins.
-
----
-
-## 16. The point of all these tools
-
-![Slide 42 - What was the point](assets/week-1-data-exploration/slide-42.jpg)
-
-The final question is: **What was the point of that?**
-
-The answer: we have a lot of data, and we cannot inspect all of it manually. We need a way to capture the "essence" of the data in one or a few numbers and visuals.
-
-### What summary tools do together
-
-| Tool | What it does | Why it is needed |
-| --- | --- | --- |
-| Mean | Calculates the arithmetic balance point | Useful for balanced numeric data and quick comparisons |
-| Median | Finds the middle value | Better for skewed data or data with outliers |
-| Mode | Finds the most common value | Works for categorical data and popularity questions |
-| Outlier detection | Finds unusual values | Helps catch errors and rare important cases |
-| Q1 and Q3 | Mark the lower and upper quartiles | Describe spread around the median |
-| IQR | Measures the middle 50% spread | Helps compare variability and define outlier boundaries |
-| Box plot | Visualizes median, quartiles, spread, and outliers | Gives a fast overview of distribution |
+This is better than only comparing averages, because the box plot also shows whether the values are stable, spread out, or affected by outliers.
 
 ---
 
-## 17. Practical EDA workflow for the travel agency
+## 12. A good EDA workflow for this dataset
 
-Using the lecture ideas, a good EDA workflow would be:
+![The point of summary statistics](assets/week-1-data-exploration/slide-42.jpg)
 
-1. **Start with a question.**  
-   Example: Which package type has the highest margin?
+The lecture ends with the idea that we have too much data to inspect everything manually. The goal is to capture the "essence" of the data using a few meaningful numbers and visuals.
 
-2. **Identify relevant columns.**  
-   Example: `Package type`, `Margin`, `Cost`, `Destination`.
+A good EDA workflow for the travel-agency dataset would be:
 
-3. **Classify data types.**  
-   `Package type` is nominal categorical. `Margin` and `Cost` are continuous numeric.
+1. **Understand the goal.**  
+   Decide what question you want to answer, such as profitability, popularity, customer satisfaction, or pricing.
 
-4. **Check basic quality.**  
-   Look for missing values, impossible values, duplicates, and suspicious outliers.
+2. **Identify the relevant columns.**  
+   For profitability, use columns like `Cost`, `Margin`, `Package type`, and `Destination`.
 
-5. **Calculate summary statistics.**  
-   Use mean and median margin, count packages, and check mode for most common package type.
+3. **Classify the data types.**  
+   Know which columns are numeric, categorical, binary, or ordinal.
 
-6. **Visualize distributions.**  
-   Use box plots to compare margins across package types.
+4. **Check data quality.**  
+   Look for missing values, impossible values, duplicates, wrong units, and strange outliers.
 
-7. **Interpret with caution.**  
-   Ask whether outliers, skew, or small sample sizes are changing the conclusion.
+5. **Calculate the right summaries.**  
+   Use mean and median for numeric data, mode for categorical data, and quartiles for spread.
 
-8. **Connect back to business decisions.**  
-   Use the result to support pricing, marketing, or package design.
+6. **Visualize important patterns.**  
+   Use charts such as box plots to compare groups and detect unusual values.
 
----
+7. **Interpret carefully.**  
+   Ask whether the statistic actually answers the business question.
 
-## 18. Key takeaways
-
-- EDA is about understanding data before modeling it.
-- A column's data type determines what calculations and charts make sense.
-- The mean is useful, but it can be misleading with outliers or skewed data.
-- The median better represents the middle of skewed data.
-- The mode is especially useful for categorical data.
-- Outliers can be errors, rare real events, or important business signals.
-- Q1, Q3, IQR, and box plots help summarize spread and detect unusual values.
-- Statistics are not automatically truthful. They need context, correct interpretation, and honest presentation.
+8. **Connect the result to a decision.**  
+   Use the analysis to support pricing, marketing, product design, or customer strategy.
 
 ---
 
-## Appendix: all rendered slide pictures
+## 13. Most important takeaways
 
-The images below are included so the Markdown file uses the visual material from the PDF directly. The main explanations above focus on the slides that introduce or clarify the core concepts.
+- EDA is the process of understanding data before using it for decisions or machine learning.
+- The same column can be mathematically simple but business-wise important.
+- Data types determine which statistics and charts make sense.
+- Continuous data, discrete data, nominal categories, binary data, and ordinal categories must be treated differently.
+- The mean is useful, but it is sensitive to extreme values.
+- The median is often better for skewed data or data with outliers.
+- The mode is the best basic summary for many categorical questions.
+- Outliers should be investigated, not blindly removed.
+- Q1, Q3, and IQR describe the spread of the middle part of the data.
+- Box plots summarize center, spread, and possible outliers in one visual.
+- Statistics can mislead if they are presented without context.
+- Good analysis uses the right statistic for the right question.
 
-<details>
-<summary>Open all slide screenshots</summary>
+---
 
-<img alt="Slide 01" src="assets/week-1-data-exploration/slide-01.jpg" width="280" />
-<img alt="Slide 02" src="assets/week-1-data-exploration/slide-02.jpg" width="280" />
-<img alt="Slide 03" src="assets/week-1-data-exploration/slide-03.jpg" width="280" />
-<img alt="Slide 04" src="assets/week-1-data-exploration/slide-04.jpg" width="280" />
-<img alt="Slide 05" src="assets/week-1-data-exploration/slide-05.jpg" width="280" />
-<img alt="Slide 06" src="assets/week-1-data-exploration/slide-06.jpg" width="280" />
-<img alt="Slide 07" src="assets/week-1-data-exploration/slide-07.jpg" width="280" />
-<img alt="Slide 08" src="assets/week-1-data-exploration/slide-08.jpg" width="280" />
-<img alt="Slide 09" src="assets/week-1-data-exploration/slide-09.jpg" width="280" />
-<img alt="Slide 10" src="assets/week-1-data-exploration/slide-10.jpg" width="280" />
-<img alt="Slide 11" src="assets/week-1-data-exploration/slide-11.jpg" width="280" />
-<img alt="Slide 12" src="assets/week-1-data-exploration/slide-12.jpg" width="280" />
-<img alt="Slide 13" src="assets/week-1-data-exploration/slide-13.jpg" width="280" />
-<img alt="Slide 14" src="assets/week-1-data-exploration/slide-14.jpg" width="280" />
-<img alt="Slide 15" src="assets/week-1-data-exploration/slide-15.jpg" width="280" />
-<img alt="Slide 16" src="assets/week-1-data-exploration/slide-16.jpg" width="280" />
-<img alt="Slide 17" src="assets/week-1-data-exploration/slide-17.jpg" width="280" />
-<img alt="Slide 18" src="assets/week-1-data-exploration/slide-18.jpg" width="280" />
-<img alt="Slide 19" src="assets/week-1-data-exploration/slide-19.jpg" width="280" />
-<img alt="Slide 20" src="assets/week-1-data-exploration/slide-20.jpg" width="280" />
-<img alt="Slide 21" src="assets/week-1-data-exploration/slide-21.jpg" width="280" />
-<img alt="Slide 22" src="assets/week-1-data-exploration/slide-22.jpg" width="280" />
-<img alt="Slide 23" src="assets/week-1-data-exploration/slide-23.jpg" width="280" />
-<img alt="Slide 24" src="assets/week-1-data-exploration/slide-24.jpg" width="280" />
-<img alt="Slide 25" src="assets/week-1-data-exploration/slide-25.jpg" width="280" />
-<img alt="Slide 26" src="assets/week-1-data-exploration/slide-26.jpg" width="280" />
-<img alt="Slide 27" src="assets/week-1-data-exploration/slide-27.jpg" width="280" />
-<img alt="Slide 28" src="assets/week-1-data-exploration/slide-28.jpg" width="280" />
-<img alt="Slide 29" src="assets/week-1-data-exploration/slide-29.jpg" width="280" />
-<img alt="Slide 30" src="assets/week-1-data-exploration/slide-30.jpg" width="280" />
-<img alt="Slide 31" src="assets/week-1-data-exploration/slide-31.jpg" width="280" />
-<img alt="Slide 32" src="assets/week-1-data-exploration/slide-32.jpg" width="280" />
-<img alt="Slide 33" src="assets/week-1-data-exploration/slide-33.jpg" width="280" />
-<img alt="Slide 34" src="assets/week-1-data-exploration/slide-34.jpg" width="280" />
-<img alt="Slide 35" src="assets/week-1-data-exploration/slide-35.jpg" width="280" />
-<img alt="Slide 36" src="assets/week-1-data-exploration/slide-36.jpg" width="280" />
-<img alt="Slide 37" src="assets/week-1-data-exploration/slide-37.jpg" width="280" />
-<img alt="Slide 38" src="assets/week-1-data-exploration/slide-38.jpg" width="280" />
-<img alt="Slide 39" src="assets/week-1-data-exploration/slide-39.jpg" width="280" />
-<img alt="Slide 40" src="assets/week-1-data-exploration/slide-40.jpg" width="280" />
-<img alt="Slide 41" src="assets/week-1-data-exploration/slide-41.jpg" width="280" />
-<img alt="Slide 42" src="assets/week-1-data-exploration/slide-42.jpg" width="280" />
-<img alt="Slide 43" src="assets/week-1-data-exploration/slide-43.jpg" width="280" />
+## 14. Quick reference table
 
-</details>
+| Concept | Best used for | What it answers | Watch out for |
+| --- | --- | --- | --- |
+| Mean | Numeric data | What is the arithmetic average? | Can be distorted by outliers. |
+| Median | Numeric data, skewed data | What is the middle value? | Does not show full spread by itself. |
+| Mode | Categorical or repeated values | What occurs most often? | There can be multiple modes. |
+| Outlier | Data-quality and unusual-case checks | Which values are strange? | Strange does not always mean wrong. |
+| Q1 and Q3 | Numeric distributions | Where is the middle 50%? | Need sorted data or percentile calculation. |
+| IQR | Spread of numeric data | How wide is the middle 50%? | Does not describe all extreme values. |
+| Box plot | Comparing distributions | What are the center, spread, and outliers? | Needs interpretation; not every point is shown. |
+
