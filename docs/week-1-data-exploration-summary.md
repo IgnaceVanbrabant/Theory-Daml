@@ -4,7 +4,7 @@ Source: `Week_1_-_Data_Exploration_ce24.pdf`
 Course: Data Analytics & Machine Learning  
 Topic: Exploratory Data Analysis (EDA)
 
-This is not a slide-by-slide explanation. It is a meaningful study summary of the important ideas from the PDF, with selected pictures from the lecture where they help explain the concept.
+This summary groups the lecture into the main ideas you need to understand, with selected pictures from the PDF where they help explain the concept.
 
 ---
 
