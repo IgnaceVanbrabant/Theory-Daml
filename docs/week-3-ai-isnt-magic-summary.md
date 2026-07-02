@@ -348,6 +348,7 @@ Decision trees often choose the split with the best information gain.
 ## Gini index
 
 The **Gini index** measures how likely it is that an instance would be classified incorrectly if labeled randomly according to the class distribution.
+De Gini-index (of Gini-coëfficiënt) is een maat om te meten hoe ongelijk iets verdeeld is, meestal inkomen of vermogen in een bevolking.
 
 Low Gini:
 
